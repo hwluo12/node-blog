@@ -51,9 +51,13 @@ const serverHandle = (req, res) => {
        * @param {type} 
        * @return: 
        */
-      const blogData = handleBlogRouter(req, res);
+      const blogData = handleBlogRouter(req, res)
       if (blogData) {
-        res.end(JSON.stringify(blogData))
+        blogData.then(result => {
+          res.end(JSON.stringify(result))
+        }).catch((err) => {
+          res.end(JSON.stringify('发生错误'))
+        })
         return
       }
 
@@ -64,7 +68,11 @@ const serverHandle = (req, res) => {
        */
       const userData = handleUserRouter(req, res)
       if (userData) {
-        res.end(JSON.stringify(userData))
+        userData.then(result => {
+          res.end(JSON.stringify(result))
+        }).catch((err) => {
+          res.end(JSON.stringify('发生错误'))
+        })
         return
       }
 

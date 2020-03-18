@@ -20,9 +20,10 @@ const handleBlogRouter = (req, res) => {
     const author = req.query.author || ''
     const keyword = req.query.keyword || ''
 
-    const listData = getList(author, keyword)
-
-    return new SuccessModel(listData)
+    const result = getList(author, keyword)
+    return result.then(listData => {
+      return new SuccessModel(listData)
+    })
   }
 
   /**
@@ -31,8 +32,10 @@ const handleBlogRouter = (req, res) => {
   * @return: 
   */
   if (method === 'GET' && req.path === '/api/blog/detail') {
-    const data = getDetail(id)
-    return new SuccessModel(data)
+    const result = getDetail(id)
+    return result.then(data => {
+      return new SuccessModel(data)
+    })
   }
 
   /**
@@ -41,8 +44,11 @@ const handleBlogRouter = (req, res) => {
    * @return: 
    */
   if (method === 'POST' && req.path === '/api/blog/new') {
-    const result = newBlog(req.body)
-    return new SuccessModel(result)
+    const author = 'zhangsan';
+    const result = newBlog(req.body, author)
+    return result.then(data => {
+      return new SuccessModel(data)
+    })
   }
 
   /**
@@ -52,11 +58,14 @@ const handleBlogRouter = (req, res) => {
    */
   if (method === 'POST' && req.path === '/api/blog/update') {
     const result = updateBlog(id, req.body)
-    if (result) {
-      return new SuccessModel('更新成功')
-    } else {
-      return new ErrorModel('更新失败')
-    }
+    return result.then(data => {
+      if (data) {
+        return new SuccessModel('更新成功')
+      } else {
+        return new ErrorModel('更新失败')
+      }
+    })
+
   }
 
   /**
@@ -65,12 +74,16 @@ const handleBlogRouter = (req, res) => {
    * @return: 
    */
   if (method === 'POST' && req.path === '/api/blog/del') {
-    const result = delBlog(id);
-    if (result) {
-      return new SuccessModel('删除成功')
-    } else {
-      return new ErrorModel('删除失败')
-    }
+    const author = 'zhangsan'; // 假数据
+    const result = delBlog(id, author);
+    return result.then(data => {
+      if (data) {
+        return new SuccessModel('删除成功')
+      } else {
+        return new ErrorModel('删除失败')
+      }
+    })
+
   }
 }
 
