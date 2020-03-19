@@ -2,6 +2,13 @@ const querystring = require('querystring')
 const handleBlogRouter = require('./src/router/blog')
 const handleUserRouter = require('./src/router/user')
 
+const SESSION_DATA = {}
+
+const getCookieExpires = () => {
+  const d = new Date()
+  d.setTime(d.getTime() + 24 * 60 * 60 * 1000)
+  return d
+}
 
 // 获取postdata
 const getPostData = (req) => {
@@ -53,7 +60,22 @@ const serverHandle = (req, res) => {
     const val = arr[1]
     req.cookie[key] = val
   })
-  console.log('req.cookie is: ', req.cookie);
+  console.log('req.cookie is: ', req.cookie)
+
+  // 解析session
+  let needSetCookie = false
+  let userId = req.cookie.userId
+  if (userId) {
+    if (!SESSION_DATA[userId]) {
+      SESSION_DATA[userId] = {}
+    }
+  } else {
+    needSetCookie = true
+    userId = `${Date.now()}_${Math.random()}`
+    SESSION_DATA[userId] = {}
+  }
+  req.session = SESSION_DATA[userId]
+  console.log('SESSION_DATA is ', SESSION_DATA);
 
 
   // 处理post data
@@ -69,6 +91,9 @@ const serverHandle = (req, res) => {
       const blogData = handleBlogRouter(req, res)
       if (blogData) {
         blogData.then(result => {
+          if (needSetCookie) {
+            res.setHeader('Set-Cookie', `userId=${userId};path=/;httpOnly;expires=${getCookieExpires()};`)
+          }
           res.end(JSON.stringify(result))
         }).catch((err) => {
           res.end(JSON.stringify('发生错误'))
@@ -84,6 +109,9 @@ const serverHandle = (req, res) => {
       const userData = handleUserRouter(req, res)
       if (userData) {
         userData.then(result => {
+          if (needSetCookie) {
+            res.setHeader('Set-Cookie', `userId=${userId};path=/;httpOnly;expires=${getCookieExpires()};`)
+          }
           res.end(JSON.stringify(result))
         }).catch((err) => {
           res.end(JSON.stringify('发生错误'))
