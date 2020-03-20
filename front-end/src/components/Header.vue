@@ -1,12 +1,14 @@
 <template>
   <el-row class="header">
     <el-col :span="20">
-      <div>欢迎来到博客</div>
+      <router-link to="/" tag="div" style="cursor:pointer"
+        >欢迎来到博客</router-link
+      >
     </el-col>
     <el-col :span="4" class="user">
       <div v-if="login">
         <i class="el-icon-user"></i>
-        <span class="username">欢迎：{{username}}</span>
+        <span class="username">欢迎：{{ username }}</span>
         <i class="el-icon-switch-button"></i>
       </div>
       <div v-else>
