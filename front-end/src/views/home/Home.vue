@@ -1,9 +1,11 @@
 <template>
   <div>
-    <div v-for="item of formatTimeList" :key="item.id">
-      <router-link :to="'/about?id=' + item.id" tag="div" class="title">{{
+    <div style="width: 300px" v-for="item of formatTimeList" :key="item.id">
+      <router-link :to="'/about?id=' + item.id" tag="div" class="title">
+        {{
         item.title
-      }}</router-link>
+        }}
+      </router-link>
       <div class="createtime">日期：{{ item.createtime }}</div>
     </div>
   </div>

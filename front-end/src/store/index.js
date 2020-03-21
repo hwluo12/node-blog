@@ -8,7 +8,12 @@ export default new Vuex.Store({
     login: false,
     username: ""
   },
-  mutations: {},
+  mutations: {
+    changeLoginStatus(state, payload) {
+      state.login = payload.login;
+      state.username = payload.username;
+    }
+  },
   actions: {},
   modules: {}
 });
