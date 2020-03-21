@@ -14,22 +14,31 @@
       </el-form>
     </div>
     <div>
-      <el-table :data="tableData" style="width: 500px">
+      <el-table :data="tableData" style="width: 600px">
         <el-table-column label="标题" prop="title"></el-table-column>
         <el-table-column label="内容" prop="content"></el-table-column>
+        <el-table-column label="作者" prop="author"></el-table-column>
         <el-table-column align="right">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
+              >Edit</el-button
+            >
             <el-button
               size="mini"
               type="danger"
               @click="handleDelete(scope.$index, scope.row)"
-            >Delete</el-button>
+              >Delete</el-button
+            >
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog title="编辑博客" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+    <el-dialog
+      title="编辑博客"
+      :visible.sync="dialogVisible"
+      width="30%"
+      :before-close="handleClose"
+    >
       <el-form :inline="true" size="mini" width="100%">
         <el-form-item label="标题">
           <el-input v-model="row.title" placeholder="请输入标题"></el-input>
@@ -54,7 +63,10 @@
           <el-input v-model="newRow.title" placeholder="请输入标题"></el-input>
         </el-form-item>
         <el-form-item label="内容">
-          <el-input v-model="newRow.content" placeholder="请输入内容"></el-input>
+          <el-input
+            v-model="newRow.content"
+            placeholder="请输入内容"
+          ></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer">
