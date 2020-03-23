@@ -1,6 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+const fs = require('fs');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const session = require('express-session');
@@ -10,13 +11,26 @@ const { redisClient } = require('./db/redis');
 const blogRouter = require('./routes/blog');
 const userRouter = require('./routes/user');
 
+const ENV = process.env.NODE_ENV
+
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(logger('dev'));
+if (ENV !== 'production') {
+  app.use(logger('dev'));
+} else {
+  const logFileName = path.join(__dirname, 'logs', 'access.log')
+  app.use(logger('combined', {
+    stream: fs.createWriteStream(logFileName, {
+      flags: 'a'
+    })
+  }))
+}
+
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser('WoAI2341'));
